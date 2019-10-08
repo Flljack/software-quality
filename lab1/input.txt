@@ -1,0 +1,9 @@
+ : Use php index.php a b c
+1 1 1 1 : Use php index.php a b c
+0 0 0 : Not a triangle
+1 1 1 :Equilateral
+1 3 3: Isosceles
+3 4 5:Simple
+1 1 0: Not a triangle
+-10 5 3:Side cannot be negative length
+one two three:Triangle sides must be a number
