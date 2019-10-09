@@ -20,7 +20,10 @@ class Triangle
 
     public function whatIsTriangle()
     {
-        if ($this->lengthSideA > 0 && $this->lengthSideB > 0 && $this->lengthSideC >0 ) {
+        if ($this->lengthSideA > 0 && $this->lengthSideB > 0 && $this->lengthSideC > 0
+            && $this->lengthSideA + $this->lengthSideB > $this->lengthSideC
+            && $this->lengthSideA + $this->lengthSideC > $this->lengthSideB
+            && $this->lengthSideB + $this->lengthSideC > $this->lengthSideA) {
             if ($this->lengthSideA == $this->lengthSideB && $this->lengthSideB == $this->lengthSideC) {
                 return "Equilateral";
             }
