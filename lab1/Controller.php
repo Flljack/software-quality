@@ -20,12 +20,12 @@ class Controller
         $lengthSideC = $this->argv[3];
 
         if (!is_numeric($lengthSideA) || !is_numeric($lengthSideB) || !is_numeric($lengthSideC)) {
-            echo "Triangle sides must be a number";
+            echo "error";
             return;
         }
 
-        if ($lengthSideA < 0 || $lengthSideB < 0 || $lengthSideC  < 0) {
-            echo "Side cannot be negative length";
+        if ($lengthSideA < 0 || $lengthSideB < 0 || $lengthSideC  < 0 || $lengthSideA > PHP_FLOAT_MAX || $lengthSideB > PHP_FLOAT_MAX || $lengthSideC  > PHP_FLOAT_MAX  ) {
+            echo "error";
             return;
         }
 
