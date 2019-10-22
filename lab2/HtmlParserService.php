@@ -27,7 +27,7 @@ class HtmlParserService
             return $link;
         }
         if (substr($link, 0, 3) == '../') {
-            return $baseUrl . substr($link, 3);
+            return 'http://52.136.215.164/' . substr($link, 3);
         }
         return $baseUrl . $link;
     }

@@ -2,46 +2,50 @@
 
 require 'vendor/autoload.php';
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 
 class UrlCheckerService
 {
-    private $baseUrl;
     private $client;
 
-    public function __construct($baseUrl)
+    public function __construct()
     {
-        $this->baseUrl = $baseUrl;
         $this->client = new Client();
     }
 
-    public function getHtmlContent()
+    public function getHtmlContent($url)
     {
-        return (string) $this->client->request('GET', $this->baseUrl)->getBody();
+        return (string) $this->client->request('GET', $url)->getBody();
     }
 
-    public function sortLinksByStatusCode($links, $validFileName, $invalidFileName)
+    public function sortLinksByStatusCode($links, $validFileName, $invalidFileName, $urlFrom)
     {
-        $handleVild = fopen($validFileName, 'w');
-        $handleInvalid = fopen($invalidFileName, 'w');
+        $validLinks = [];
+        $handleVild = fopen($validFileName, 'a');
+        $handleInvalid = fopen($invalidFileName, 'a');
 
         foreach ($links as $link) {
-            if ($this->getStatusCodeLink($link) == 200) {
+            $statusCode = $this->getStatusCodeLink($link);
+            if ($statusCode == 200) {
                 fwrite($handleVild, "$link \n");
+                $validLinks[] = $link;
             } else {
-                fwrite($handleInvalid, "$link \n");
+                fwrite($handleInvalid, "$link | $statusCode | $urlFrom \n");
             }
         }
 
         fclose($handleVild);
         fclose($handleInvalid);
+
+        return $validLinks;
     }
 
     private function getStatusCodeLink($link)
     {
         try {
-         return (int) $this->client->request('GET', $link)->getStatusCode();
-        } catch (Exception  $e) {
-            return 404;
+            return $this->client->request('GET', $link)->getStatusCode();
+        } catch (RequestException $e) {
+            return $e->getResponse()->getStatusCode();
         }
     }
 }
