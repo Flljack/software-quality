@@ -8,6 +8,10 @@ class UrlCheckerService
 {
     private $client;
 
+    private $validLink = [];
+
+    private $invalidLink = [];
+
     public function __construct()
     {
         $this->client = new Client();
@@ -18,24 +22,19 @@ class UrlCheckerService
         return (string) $this->client->request('GET', $url)->getBody();
     }
 
-    public function sortLinksByStatusCode($links, $validFileName, $invalidFileName, $urlFrom)
+    public function sortLinksByStatusCode($links, $urlFrom)
     {
         $validLinks = [];
-        $handleVild = fopen($validFileName, 'a');
-        $handleInvalid = fopen($invalidFileName, 'a');
 
         foreach ($links as $link) {
             $statusCode = $this->getStatusCodeLink($link);
             if ($statusCode == 200) {
-                fwrite($handleVild, "$link \n");
+                $this->validLink[] = $link;
                 $validLinks[] = $link;
             } else {
-                fwrite($handleInvalid, "$link | $statusCode | $urlFrom \n");
+                $this->invalidLink[] = "$link | $statusCode";
             }
         }
-
-        fclose($handleVild);
-        fclose($handleInvalid);
 
         return $validLinks;
     }
@@ -47,5 +46,27 @@ class UrlCheckerService
         } catch (RequestException $e) {
             return $e->getResponse()->getStatusCode();
         }
+    }
+
+    public function saveResult($validFileName, $invalidFileName)
+    {
+        $handleValild = fopen($validFileName, 'w');
+        $handleInvalid = fopen($invalidFileName, 'w');
+        $links = array_unique($this->validLink);
+        foreach ($links as $link) {
+            fwrite($handleValild, "$link \n");
+        }
+        $date = new DateTime();
+        fwrite($handleValild, "\nlinks: " . count($links) . ' ' . $date->format('Y-m-d H:i:s'));
+
+        $links = array_unique($this->invalidLink);
+        foreach ($links as $link) {
+            fwrite($handleInvalid, "$link \n");
+        }
+
+        fwrite($handleInvalid, "\nlinks: " . count($links) . ' ' . $date->format('Y-m-d H:i:s'));
+
+        fclose($handleValild);
+        fclose($handleInvalid);
     }
 }

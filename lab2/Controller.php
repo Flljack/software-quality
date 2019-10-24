@@ -16,7 +16,7 @@ class Controller
 
         $htmlContent = $urlCheckerService->getHtmlContent(self::CHECKED_URL);
         $links = $parser->getAllUrlsFromHtml($htmlContent, self::CHECKED_URL);
-        $validLinks = $urlCheckerService->sortLinksByStatusCode($links, self::VALID_URL_FILENAME, self::INVALID_URL_FILENAME, self::CHECKED_URL);
+        $validLinks = $urlCheckerService->sortLinksByStatusCode($links,  self::CHECKED_URL);
 
         function getLinkByDomain($link)
         {
@@ -33,7 +33,7 @@ class Controller
         foreach ($unvisitedLinks as $link) {
             $htmlContent = $urlCheckerService->getHtmlContent($link);
             $links = $parser->getAllUrlsFromHtml($htmlContent, self::CHECKED_URL);
-            $validLinks = $urlCheckerService->sortLinksByStatusCode($links, self::VALID_URL_FILENAME, self::INVALID_URL_FILENAME, $link);
+            $validLinks = $urlCheckerService->sortLinksByStatusCode($links, $link);
             $validLinks = array_filter($validLinks, 'getLinkByDomain');
             foreach ($validLinks as $validLink) {
                 if (in_array($validLink, $domianLinks)) {
@@ -45,6 +45,6 @@ class Controller
             }
             $visiedLinks [] = $link;
         }
-        print_r($domianLinks);
+        $urlCheckerService->saveResult(self::VALID_URL_FILENAME, self::INVALID_URL_FILENAME);
     }
 }
