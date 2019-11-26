@@ -11,7 +11,10 @@ class HtmlParserService
         $aElements = $document->getElementsByTagName("a");
         $links = [];
         foreach ($aElements as $aElement) {
-            $links[] = $aElement->getAttribute('href');
+            $link = $aElement->getAttribute('href');
+            if (!in_array($link, ['#', 'tel://1234567920', 'mailto:info@yoursite.com'])) {
+                $links[] = $aElement->getAttribute('href');
+            }
         }
         $links = array_unique($links);
 
