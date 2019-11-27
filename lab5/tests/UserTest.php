@@ -4,82 +4,69 @@ use PHPUnit\Framework\TestCase;
 
 class UserTest extends TestCase
 {
-    public function testCanBeCreatedFromValidEmailAndPassword()
+    //construct_ConstructUserClass_ReturnUserClass
+    public function construct_ConstructUserClass_ReturnUserClass()
     {
         $this->assertInstanceOf(
             User::class,
-            User::fromString('user@example.com', 'Qwerty123')
+            User::fromString('user@example.com', 'Qwerty123'),
+            'Ошибка в создании класса'
         );
     }
 
-    public function testCannotBeCreatedFromInvalidsSmallLettersPassword()
+    public function EnsureIsValidPassword_InvalidPassowrdNullCapitalLatters_ReturnException()
     {
         $this->expectException(InvalidArgumentException::class);
 
         User::fromString('user@example.com', 'qwerty123');
     }
 
-    public function testCannotBeCreatedFromInvalidsCapitalLettersPassword()
+    public function EnsureIsValidPassword_InvalidPassowrdNullSmallLatters_ReturnException()
     {
         $this->expectException(InvalidArgumentException::class);
 
         User::fromString('user@example.com', 'QWERTY123');
     }
 
-    public function testCannotBeCreatedFromInvalidsOnlyLettersPassword()
+    public function EnsureIsValidPassword_InvalidPassowrdNullDigitals_ReturnException()
     {
         $this->expectException(InvalidArgumentException::class);
 
         User::fromString('user@example.com', 'Qwerty');
     }
 
-    public function testCannotBeCreatedFromInvalidEmailAddress()
+    public function EnsureIsValidEmail_InvalidEmailByFilter_ReturnExceptionq()
     {
         $this->expectException(InvalidArgumentException::class);
 
         User::fromString('invalid', 'Qwerty123');
     }
 
-    public function testCanBeUsedGetEmail()
+    public function GetEmail_ReturnCurrentEmail()
     {
         $this->assertEquals(
             'user@example.com',
-            User::fromString('user@example.com', 'Qwerty123')->getEmail()
+            User::fromString('user@example.com', 'Qwerty123')->getEmail(),
+            'Email не совпадает с email при создании'
         );
     }
 
-    public function testCanBeUsedGetPassword()
+    public function GetPassword_ReturnCurrentPassword()
     {
         $this->assertEquals(
             'Qwerty123',
-            User::fromString('user@example.com', 'Qwerty123')->getPassword()
+            User::fromString('user@example.com', 'Qwerty123')->getPassword(),
+            'Password не совпадает с password при создании'
         );
     }
 
-    public function testCanBeAddOptionalInformationOnlyName()
+    public function AddOptionalInformation_mutationOptionalVars_ReturnUserClass()
     {
         $this->assertInstanceOf(
             User::class,
-            User::fromString('user@example.com', 'Qwerty123')->addOptionalInformation('Dmitry')
+            User::fromString('user@example.com', 'Qwerty123')->addOptionalInformation('Dmitry', 'Ryzanov', '1998-12-20')
         );
     }
-
-    public function testCanBeAddOptionalInformationOnlySurname()
-    {
-        $this->assertInstanceOf(
-            User::class,
-            User::fromString('user@example.com', 'Qwerty123')->addOptionalInformation(null, 'Ryazanov')
-        );
-    }
-
-    public function testCanBeAddOptionalInformationOnlyDateOfBirth()
-    {
-        $this->assertInstanceOf(
-            User::class,
-            User::fromString('user@example.com', 'Qwerty123')->addOptionalInformation(null, null, DateTime::createFromFormat('Y-m-d', '1998-12-20'))
-        );
-    }
-
     public function testMutationName()
     {
         $this->assertEquals(
