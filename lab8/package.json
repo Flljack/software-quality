@@ -6,15 +6,13 @@
   "scripts": {
     "test": "mocha --recursive --timeout 10000 test.js"
   },
-  "repository": "git@github.com:dalenguyen/selenium-javascript.git",
-  "author": "Dale Nguyen <dungnq@itbox4vn.com>",
   "license": "MIT",
   "dependencies": {
-    "chromedriver": "^2.42.1",
+    "chromedriver": "^79.0.0",
     "selenium-webdriver": "^4.0.0-alpha.1"
   },
   "devDependencies": {
-    "mocha": "^5.2.0"
+    "mocha": "^6.2.2"
   },
   "engines": {
     "node": ">=8.0.0",
